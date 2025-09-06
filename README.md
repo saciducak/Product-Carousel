@@ -41,7 +41,7 @@ A dynamic, responsive product carousel component built with vanilla JavaScript. 
 
 ## 🏗️ Architecture
 
-### Project Structure
+## Project Structure
 ```
 ProductCarousel/
 ├── Configuration
@@ -131,16 +131,16 @@ This project follows clean code principles:
 - Performance optimized
 - Well-documented code
 
-### 👨‍💻 Reference
+## 👨‍💻 Reference
 
-   ## https://baymard.com/blog/carousel-usability
-   # E-ticaret carousel UX araştırmaları için inceledim 
+   # https://baymard.com/blog/carousel-usability
+   E-ticaret carousel UX araştırmaları için inceledim 
 
-   ## https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-   # Responsive layout için flexbox kullanımı için 
+   # https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+   Responsive layout için flexbox kullanımı için 
 
-   ## https://developers.google.com/web/fundamentals/performance
-   ## Stackoverflow 
+   # https://developers.google.com/web/fundamentals/performance
+   # Stackoverflow 
 
 ---
 
