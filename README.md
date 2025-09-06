@@ -133,7 +133,7 @@ This project follows clean code principles:
 
 ## 👨‍💻 Reference
 
-   # https://baymard.com/blog/carousel-usability
+   # [https://baymard.com/blog/carousel-usability](https://medium.com/@shubhamdeepgupta/carousels-ux-understanding-c19f15b7de1b)
    E-ticaret carousel UX araştırmaları için inceledim 
 
    # https://css-tricks.com/snippets/css/a-guide-to-flexbox/
