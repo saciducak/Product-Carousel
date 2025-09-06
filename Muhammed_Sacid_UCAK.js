@@ -258,9 +258,49 @@
             }
             
             this.updateNavigation();
+        }
+        
+        // Handle carousel navigation
+        navigate(direction) {
+            const maxIndex = Math.max(0, this.state.products.length - this.state.itemsPerView);
+            
+            if (direction === 'next') {
+                this.state.currentIndex = Math.min(this.state.currentIndex + 1, maxIndex);
+            } else {
+                this.state.currentIndex = Math.max(this.state.currentIndex - 1, 0);
+            }
+            
+            this.updateCarouselPosition();
+            this.updateNavigation();
         },
+
+        // Update carousel position
+        updateCarouselPosition() {
+            const track = document.querySelector('.carousel-track');
+            if (!track) return;
+            
+            const itemWidth = 100 / this.state.itemsPerView;
+            const translateX = -(this.state.currentIndex * itemWidth);
+            track.style.transform = `translateX(${translateX}%)`;
+        },
+
+        // Update navigation buttons state
+        updateNavigation() {
+            const prevBtn = document.querySelector('.carousel-nav-prev');
+            const nextBtn = document.querySelector('.carousel-nav-next');
+            const maxIndex = Math.max(0, this.state.products.length - this.state.itemsPerView);
+            
+            if (prevBtn) {
+                prevBtn.disabled = this.state.currentIndex === 0;
+            }
+            
+            if (nextBtn) {
+                nextBtn.disabled = this.state.currentIndex >= maxIndex;
+            }
+        }
     };
 })();
+
 
 
 
