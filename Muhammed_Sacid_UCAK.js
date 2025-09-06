@@ -26,6 +26,31 @@
             currentIndex: 0,
             itemsPerView: CONFIG.ITEMS_PER_VIEW.DESKTOP,
             isInitialized: false
-        }
+        },
+        // Initialize the carousel
+        async init() {
+            try {
+                // Check if we're on the homepage
+                if (!this.isHomePage()) {
+                    console.log('wrong page');
+                    return;
+                }
+
+                // Prevent multiple initializations
+                if (this.state.isInitialized) return;
+                
+                this.state.isInitialized = true;
+                
+            } catch (error) {
+                console.error('Carousel initialization failed:', error);
+            }
+        },
+
+        // Check if current page is homepage
+        isHomePage() {
+            const path = window.location.pathname;
+            return path === '/' || path === '/index.html' || path === '';
+        }  
     };
 })();
+
