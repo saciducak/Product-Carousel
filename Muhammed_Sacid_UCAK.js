@@ -37,6 +37,19 @@
 
                 if (this.state.isInitialized) return;
                 this.state.isInitialized = true;
+
+                // Load functions : fix
+                this.loadFavorites();
+                
+                // Load products (from cache or API)
+                await this.loadProducts();
+                
+                // Setup the carousel
+                this.setupStyles();
+                this.renderCarousel();
+                this.attachEventListeners();
+                this.handleResponsive();
+
                 
             } catch (error) {
                 console.error('Carousel initialization failed:', error);
@@ -730,6 +743,7 @@
     }
     
 })();
+
 
 
 
