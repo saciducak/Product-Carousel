@@ -57,12 +57,22 @@
                 const data = await response.json();
                 this.state.products = data;
                 
+                // Cache the products
+                localStorage.setItem(CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(data));
+                localStorage.setItem(CONFIG.STORAGE_KEYS.LAST_FETCH, Date.now().toString());
+                
                 console.log('Products fetched from API');
             } catch (error) {
                 console.error('Failed to fetch products:', error);
+                // Try to use cached data even if expired
+                const cached = this.getCachedProducts();
+                if (cached) {
+                    this.state.products = cached;
+                }
             }
         }
     };
 })();
+
 
 
