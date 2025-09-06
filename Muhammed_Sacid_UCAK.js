@@ -258,7 +258,7 @@
             }
             
             this.updateNavigation();
-        }
+        },
         
         // Handle carousel navigation
         navigate(direction) {
@@ -297,9 +297,91 @@
             if (nextBtn) {
                 nextBtn.disabled = this.state.currentIndex >= maxIndex;
             }
-        }
+        },
+
+             // Handle responsive behavior
+        handleResponsive() {
+            const updateItemsPerView = () => {
+                const width = window.innerWidth;
+                let newItemsPerView;
+                
+                if (width <= 576) {
+                    newItemsPerView = CONFIG.ITEMS_PER_VIEW.MOBILE;
+                } else if (width <= 992) {
+                    newItemsPerView = CONFIG.ITEMS_PER_VIEW.TABLET;
+                } else {
+                    newItemsPerView = CONFIG.ITEMS_PER_VIEW.DESKTOP;
+                }
+                
+                if (newItemsPerView !== this.state.itemsPerView) {
+                    this.state.itemsPerView = newItemsPerView;
+                    this.state.currentIndex = 0;
+                    this.updateCarouselPosition();
+                    this.updateNavigation();
+                    
+                    // Update CSS variable
+                    document.documentElement.style.setProperty('--items-per-view', newItemsPerView);
+                }
+            };
+            
+            updateItemsPerView();
+            
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(updateItemsPerView, 250);
+            });
+        },
+
+        // Attach event listeners
+        attachEventListeners() {
+            // Navigation buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.carousel-nav-prev')) {
+                    this.navigate('prev');
+                } else if (e.target.closest('.carousel-nav-next')) {
+                    this.navigate('next');
+                } else if (e.target.closest('.favorite-btn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const btn = e.target.closest('.favorite-btn');
+                    const productId = parseInt(btn.dataset.favoriteId, 10);
+                    this.toggleFavorite(productId);
+                } else if (e.target.closest('.add-to-cart-btn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const btn = e.target.closest('.add-to-cart-btn');
+                    console.log('Add to cart:', btn.dataset.productId);
+                }
+            });
+            
+            // Touch support for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            const track = document.querySelector('.carousel-track');
+            if (track) {
+                track.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+                
+                track.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    const diff = touchStartX - touchEndX;
+                    
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) {
+                            this.navigate('next');
+                        } else {
+                            this.navigate('prev');
+                        }
+                    }
+                }, { passive: true });
+            }
+        },
     };
 })();
+
 
 
 
