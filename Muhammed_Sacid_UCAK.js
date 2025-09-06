@@ -27,9 +27,11 @@
             itemsPerView: CONFIG.ITEMS_PER_VIEW.DESKTOP,
             isInitialized: false
         },
+
         // Initialize the carousel
         async init() {
             try {
+                // Check if we're on the homepage
                 if (!this.isHomePage()) {
                     console.log('wrong page');
                     return;
@@ -37,8 +39,8 @@
 
                 if (this.state.isInitialized) return;
                 this.state.isInitialized = true;
-
-                // Load functions : fix
+                
+                // Load favorites from storage
                 this.loadFavorites();
                 
                 // Load products (from cache or API)
@@ -49,7 +51,6 @@
                 this.renderCarousel();
                 this.attachEventListeners();
                 this.handleResponsive();
-
                 
             } catch (error) {
                 console.error('Carousel initialization failed:', error);
@@ -60,7 +61,20 @@
         isHomePage() {
             const path = window.location.pathname;
             return path === '/' || path === '/index.html' || path === '';
-        },  
+        },
+
+        // Load products from cache or API
+        async loadProducts() {
+            const cached = this.getCachedProducts();
+            
+            if (cached && this.isCacheValid()) {
+                this.state.products = cached;
+                console.log('Products loaded from cache');
+            } else {
+                await this.fetchProducts();
+            }
+        },
+
         // Fetch products from API
         async fetchProducts() {
             try {
@@ -84,7 +98,8 @@
                 }
             }
         },
-                // Get cached products from localStorage
+
+        // Get cached products from localStorage
         getCachedProducts() {
             try {
                 const cached = localStorage.getItem(CONFIG.STORAGE_KEYS.PRODUCTS);
@@ -103,15 +118,7 @@
             const timeDiff = Date.now() - parseInt(lastFetch, 10);
             return timeDiff < CONFIG.CACHE_DURATION;
         },
-       // Save favorites to localStorage
-        saveFavorites() {
-            try {
-                const favoritesArray = Array.from(this.state.favorites);
-                localStorage.setItem(CONFIG.STORAGE_KEYS.FAVORITES, JSON.stringify(favoritesArray));
-            } catch (error) {
-                console.error('Failed to save favorites:', error);
-            }
-        },
+
         // Load favorites from localStorage
         loadFavorites() {
             try {
@@ -124,6 +131,17 @@
                 console.error('Failed to load favorites:', error);
             }
         },
+
+        // Save favorites to localStorage
+        saveFavorites() {
+            try {
+                const favoritesArray = Array.from(this.state.favorites);
+                localStorage.setItem(CONFIG.STORAGE_KEYS.FAVORITES, JSON.stringify(favoritesArray));
+            } catch (error) {
+                console.error('Failed to save favorites:', error);
+            }
+        },
+
         // Toggle favorite status
         toggleFavorite(productId) {
             if (this.state.favorites.has(productId)) {
@@ -134,6 +152,7 @@
             this.saveFavorites();
             this.updateFavoriteIcon(productId);
         },
+
         // Update favorite icon appearance
         updateFavoriteIcon(productId) {
             const icon = document.querySelector(`[data-favorite-id="${productId}"]`);
@@ -145,7 +164,8 @@
                 }
             }
         },
-        // Calculate discount percentage -> you can show in the Page (will chose color as orange)
+
+        // Calculate discount percentage -> you can see discount icon (will choose color as orange)
         calculateDiscount(price, originalPrice) {
             if (price >= originalPrice) return 0;
             return Math.round(((originalPrice - price) / originalPrice) * 100);
@@ -196,7 +216,7 @@
                 </div>
             `;
             
-            // Add click handler for product -> important
+            // Add click handler for product
             const productCard = card.querySelector('.product-card');
             productCard.addEventListener('click', (e) => {
                 // Prevent navigation when clicking buttons
@@ -207,8 +227,8 @@
             });
             
             return card;
-        }, 
-        
+        },
+
         // Render the carousel
         renderCarousel() {
             // Remove existing carousel if any
@@ -272,7 +292,7 @@
             
             this.updateNavigation();
         },
-        
+
         // Handle carousel navigation
         navigate(direction) {
             const maxIndex = Math.max(0, this.state.products.length - this.state.itemsPerView);
@@ -312,7 +332,7 @@
             }
         },
 
-             // Handle responsive behavior
+        // Handle responsive behavior
         handleResponsive() {
             const updateItemsPerView = () => {
                 const width = window.innerWidth;
@@ -393,7 +413,6 @@
             }
         },
 
-        
         // Setup styles
         setupStyles() {
             if (document.querySelector('#carousel-styles')) return;
@@ -735,23 +754,10 @@
         }
     };
 
-    // Initialize when DOM is ready !
+    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => ProductCarousel.init());
     } else {
         ProductCarousel.init();
     }
-    
 })();
-
-
-
-
-
-
-
-
-
-
-
-
