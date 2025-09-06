@@ -721,7 +721,16 @@
             document.head.appendChild(style);
         }
     };
+
+    // Initialize when DOM is ready !
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => ProductCarousel.init());
+    } else {
+        ProductCarousel.init();
+    }
+    
 })();
+
 
 
 
