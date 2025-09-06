@@ -30,15 +30,12 @@
         // Initialize the carousel
         async init() {
             try {
-                // Check if we're on the homepage
                 if (!this.isHomePage()) {
                     console.log('wrong page');
                     return;
                 }
 
-                // Prevent multiple initializations
                 if (this.state.isInitialized) return;
-                
                 this.state.isInitialized = true;
                 
             } catch (error) {
@@ -50,7 +47,22 @@
         isHomePage() {
             const path = window.location.pathname;
             return path === '/' || path === '/index.html' || path === '';
-        }  
+        },  
+        // Fetch products from API
+        async fetchProducts() {
+            try {
+                const response = await fetch(CONFIG.API_URL);
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                this.state.products = data;
+                
+                console.log('Products fetched from API');
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+            }
+        }
     };
 })();
+
 
