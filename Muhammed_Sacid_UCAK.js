@@ -183,7 +183,7 @@
                 </div>
             `;
             
-            // Add click handler for product
+            // Add click handler for product -> important
             const productCard = card.querySelector('.product-card');
             productCard.addEventListener('click', (e) => {
                 // Prevent navigation when clicking buttons
@@ -194,9 +194,74 @@
             });
             
             return card;
-        }
+        }, 
+        
+        // Render the carousel
+        renderCarousel() {
+            // Remove existing carousel if any
+            const existing = document.querySelector('.product-carousel-container');
+            if (existing) existing.remove();
+            
+            // Create carousel container
+            const container = document.createElement('div');
+            container.className = 'product-carousel-container';
+            
+            // Create carousel wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'carousel-wrapper';
+            
+            // Add title
+            const title = document.createElement('h2');
+            title.className = 'carousel-title';
+            title.textContent = CONFIG.CAROUSEL_TITLE;
+            wrapper.appendChild(title);
+            
+            // Create carousel content
+            const carouselContent = document.createElement('div');
+            carouselContent.className = 'carousel-content';
+            
+            // Create navigation buttons
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'carousel-nav carousel-nav-prev';
+            prevBtn.innerHTML = '‹';
+            prevBtn.setAttribute('aria-label', 'Previous items');
+            
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'carousel-nav carousel-nav-next';
+            nextBtn.innerHTML = '›';
+            nextBtn.setAttribute('aria-label', 'Next items');
+            
+            // Create carousel track
+            const track = document.createElement('div');
+            track.className = 'carousel-track';
+            
+            // Add products to track
+            this.state.products.forEach(product => {
+                track.appendChild(this.createProductCard(product));
+            });
+            
+            // Assemble carousel
+            carouselContent.appendChild(prevBtn);
+            carouselContent.appendChild(track);
+            carouselContent.appendChild(nextBtn);
+            wrapper.appendChild(carouselContent);
+            container.appendChild(wrapper);
+            
+            // Find insertion point (after hero banner)
+            const heroBanner = document.querySelector('.hero-banner, .homepage-slider, [class*="slider"], [class*="banner"]');
+            if (heroBanner && heroBanner.parentNode) {
+                heroBanner.parentNode.insertBefore(container, heroBanner.nextSibling);
+            } else {
+                // Fallback: insert at the beginning of main content
+                const main = document.querySelector('main, .main-content, #content, body');
+                main.insertBefore(container, main.firstChild);
+            }
+            
+            this.updateNavigation();
+        },
     };
 })();
+
 
 
 
