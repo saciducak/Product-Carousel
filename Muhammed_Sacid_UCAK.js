@@ -70,9 +70,42 @@
                     this.state.products = cached;
                 }
             }
+        },
+                // Get cached products from localStorage
+        getCachedProducts() {
+            try {
+                const cached = localStorage.getItem(CONFIG.STORAGE_KEYS.PRODUCTS);
+                return cached ? JSON.parse(cached) : null;
+            } catch (error) {
+                console.error('Failed to parse cached products:', error);
+                return null;
+            }
+        },
+
+        // Check if cache is still valid
+        isCacheValid() {
+            const lastFetch = localStorage.getItem(CONFIG.STORAGE_KEYS.LAST_FETCH);
+            if (!lastFetch) return false;
+            
+            const timeDiff = Date.now() - parseInt(lastFetch, 10);
+            return timeDiff < CONFIG.CACHE_DURATION;
+        },
+
+        // Load favorites from localStorage
+        loadFavorites() {
+            try {
+                const stored = localStorage.getItem(CONFIG.STORAGE_KEYS.FAVORITES);
+                if (stored) {
+                    const favorites = JSON.parse(stored);
+                    this.state.favorites = new Set(favorites);
+                }
+            } catch (error) {
+                console.error('Failed to load favorites:', error);
+            }
         }
     };
 })();
+
 
 
 
