@@ -80,23 +80,6 @@ ProductCarousel/
 - Favorite button (heart icon)
 - Add to cart button
 
-### Navigation
-- Previous/Next arrow buttons
-- Touch swipe support on mobile
-- Disabled state at boundaries
-- Smooth transition animations
-
-## 💾 Storage Schema
-
-### Products Cache
-```javascript
-{
-  "carousel_products_data": [...],      // Product array
-  "last_data_fetch_time": "timestamp",  // Cache timestamp
-  "user_favorite_items": [1, 2, 3]      // Favorite IDs
-}
-```
-
 ## 🔧 Configuration
 
 Key settings can be adjusted in the CONFIG object:
@@ -121,23 +104,6 @@ const CONFIG = {
 - Safari 11+
 - Edge 79+
 - Mobile browsers (iOS Safari, Chrome Mobile)
-
-## 🧪 Testing
-
-### Manual Testing Checklist
-- [ ] First load fetches from API
-- [ ] Second load uses cached data
-- [ ] Favorites persist across sessions
-- [ ] Navigation works correctly
-- [ ] Responsive breakpoints trigger properly
-- [ ] Touch gestures work on mobile
-- [ ] Console shows "wrong page" on non-homepage
-
-### Performance Metrics
-- First paint: < 100ms
-- Time to interactive: < 200ms
-- Smooth 60 FPS animations
-- Bundle size: ~15KB (unminified)
 
 ## 🔒 Security
 
@@ -165,13 +131,16 @@ This project follows clean code principles:
 - Performance optimized
 - Well-documented code
 
-## 📄 License
+### 👨‍💻 Reference
 
-This project is created for demonstration purposes. All rights reserved.
+   ## https://baymard.com/blog/carousel-usability
+   # E-ticaret carousel UX araştırmaları için inceledim 
 
-## 👨‍💻 Author
+   ## https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+   # Responsive layout için flexbox kullanımı için 
 
-Developed with attention to detail and performance optimization.
+   ## https://developers.google.com/web/fundamentals/performance
+   ## Stackoverflow 
 
 ---
 
