@@ -90,7 +90,15 @@
             const timeDiff = Date.now() - parseInt(lastFetch, 10);
             return timeDiff < CONFIG.CACHE_DURATION;
         },
-
+       // Save favorites to localStorage
+        saveFavorites() {
+            try {
+                const favoritesArray = Array.from(this.state.favorites);
+                localStorage.setItem(CONFIG.STORAGE_KEYS.FAVORITES, JSON.stringify(favoritesArray));
+            } catch (error) {
+                console.error('Failed to save favorites:', error);
+            }
+        },
         // Load favorites from localStorage
         loadFavorites() {
             try {
@@ -102,9 +110,31 @@
             } catch (error) {
                 console.error('Failed to load favorites:', error);
             }
+        },
+        // Toggle favorite status
+        toggleFavorite(productId) {
+            if (this.state.favorites.has(productId)) {
+                this.state.favorites.delete(productId);
+            } else {
+                this.state.favorites.add(productId);
+            }
+            this.saveFavorites();
+            this.updateFavoriteIcon(productId);
+        },
+        // Update favorite icon appearance
+        updateFavoriteIcon(productId) {
+            const icon = document.querySelector(`[data-favorite-id="${productId}"]`);
+            if (icon) {
+                if (this.state.favorites.has(productId)) {
+                    icon.classList.add('active');
+                } else {
+                    icon.classList.remove('active');
+                }
+            }
         }
     };
 })();
+
 
 
 
